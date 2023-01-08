@@ -4,7 +4,6 @@ google-java-format = "1.15.0"
 google-java-format-jdk8 = "1.7"
 jacoco = "0.8.8"
 junit = "5.9.1"
-nexus-publish = "1.1.0"
 sonarqube = "3.5.0.2730"
 spotless = "6.12.0"
 
@@ -18,6 +17,5 @@ test-implementation = [ "assertj-core", "junit-jupiter-api" ]
 test-runtime = [ "junit-jupiter-engine" ]
 
 [plugins]
-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus-publish" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
