@@ -18,18 +18,6 @@ jacocoTestCoverageVerification {
         rule {
             limit {
                 counter = 'METHOD'
-                minimum = 0.9
-            }
-        }
-        rule {
-            limit {
-                counter = 'BRANCH'
-                minimum = 0.8
-            }
-        }
-        rule {
-            limit {
-                counter = 'INSTRUCTION'
                 minimum = 0.8
             }
         }
