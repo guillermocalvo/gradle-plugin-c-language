@@ -4,9 +4,9 @@
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/dev.guillermo.gradle.c-application)](https://plugins.gradle.org/search?term=dev.guillermo)
 
 
-# Gradle plugin for building C projects.
+# gradle-plugin-c-language
 
-This library provides lazy versions of [Result objects](https://guillermo.dev/gradle-plugin-c-language/).
+This is a Gradle Plugin for Building C Projects.
 
 
 ## Getting Started
