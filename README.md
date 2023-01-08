@@ -12,25 +12,25 @@ This is a Gradle Plugin for Building C Projects.
 ## Getting Started
 
 Use the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block) and
-[Learn how to apply plugins to subprojects](https://docs.gradle.org/current/userguide/plugins.html#sec:subprojects_plugins_dsl).
+[learn how to apply plugins to subprojects](https://docs.gradle.org/current/userguide/plugins.html#sec:subprojects_plugins_dsl).
 
 
-## C Application
+## C Application Plugin
 
-The C Application Plugin provides the tasks, configurations and conventions for building C application.
+The C Application Plugin provides the tasks, configurations and conventions for building a C application.
 
 It is currently based on [the C++ Application Plugin](https://docs.gradle.org/current/userguide/cpp_application_plugin.html).
 
 ### Usage
 
-```
+```gradle
 plugins {
   id "dev.guillermo.gradle.c-application" version "0.1.0"
 }
 ```
 
 
-## C Library
+## C Library Plugin
 
 The C Library Plugin provides the tasks, conventions and conventions for building a C library.
 
@@ -38,14 +38,14 @@ It is currently based on [the C++ Library Plugin](https://docs.gradle.org/curren
 
 ### Usage
 
-```
+```gradle
 plugins {
   id "dev.guillermo.gradle.c-library" version "0.1.0"
 }
 ```
 
 
-## C Unit Test
+## C Unit Test Plugin
 
 The C Unit Test Plugin provides the tasks, configurations and conventions for integrating with a C executable-based testing framework.
 
@@ -53,7 +53,7 @@ It is currently based on [the C++ Unit Test Plugin](https://docs.gradle.org/curr
 
 ### Usage
 
-```
+```gradle
 plugins {
   id "dev.guillermo.gradle.c-unit-test" version "0.1.0"
 }
