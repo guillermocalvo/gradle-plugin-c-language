@@ -2,7 +2,6 @@
 package dev.guillermo.gradle.language.c.plugins;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.gradle.api.Project;
@@ -42,9 +41,9 @@ class CBasePlugin {
 
         this.logger.info(
                 "Configuring C binary: {}.{} - {}",
-                this.component.getBaseName(),
+                this.component.getBaseName().get(),
                 binary.getName(),
-                binary.getClass().getSimpleName());
+                binary.getBaseName().get());
 
         final Map<String, String> from = new HashMap<>();
 
@@ -63,13 +62,11 @@ class CBasePlugin {
         compileTask.getSource().setFrom(this.project.fileTree(from));
 
         final ListProperty<String> currentCompilerArgs = compileTask.getCompilerArgs();
-        final List<String> args = currentCompilerArgs.get();
-        this.logger.info("  current compiler args: {}", args);
 
         if (toolchain instanceof VisualCpp) {
-            compileTask.getCompilerArgs().addAll("/TC", "/std:c17");
+            currentCompilerArgs.addAll("/TC", "/std:c17");
         } else if (toolchain instanceof GccCompatibleToolChain) {
-            compileTask.getCompilerArgs().addAll("-x", "c", "-std=c11");
+            currentCompilerArgs.addAll("-x", "c", "-std=c11");
         }
 
         if (binary instanceof ComponentWithExecutable) {
