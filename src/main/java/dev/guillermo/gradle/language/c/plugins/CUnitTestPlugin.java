@@ -32,6 +32,7 @@ public class CUnitTestPlugin extends CppUnitTestPlugin {
                 targetMachineFactory);
     }
 
+    @Override
     public void apply(Project project) {
         project.getLogger().info("Applying c-unit-test plugin");
         super.apply(project);

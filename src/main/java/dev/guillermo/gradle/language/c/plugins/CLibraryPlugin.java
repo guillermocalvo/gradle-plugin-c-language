@@ -23,6 +23,7 @@ public class CLibraryPlugin extends CppLibraryPlugin {
         super(componentFactory, toolChainSelector, attributesFactory, targetMachineFactory);
     }
 
+    @Override
     public void apply(Project project) {
         project.getLogger().info("Applying c-library plugin");
         super.apply(project);

@@ -23,6 +23,7 @@ public class CApplicationPlugin extends CppApplicationPlugin {
         super(componentFactory, toolChainSelector, attributesFactory, targetMachineFactory);
     }
 
+    @Override
     public void apply(Project project) {
         project.getLogger().info("Applying c-application plugin");
         super.apply(project);
