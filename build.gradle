@@ -32,21 +32,36 @@ gradlePlugin {
             id = 'dev.guillermo.gradle.c-application'
             displayName = 'C Application Plugin'
             description = 'A plugin that produces a native application from C source'
-            tags.set(['native', 'c', 'application', 'toolchain'])
+            tags.set([
+                'native',
+                'c',
+                'application',
+                'toolchain'
+            ])
             implementationClass = 'dev.guillermo.gradle.language.c.plugins.CApplicationPlugin'
         }
         cLibrary {
             id = 'dev.guillermo.gradle.c-library'
             displayName = 'C Library Plugin'
             description = 'A plugin that produces a native library from C source'
-            tags.set(['native', 'c', 'library', 'toolchain'])
+            tags.set([
+                'native',
+                'c',
+                'library',
+                'toolchain'
+            ])
             implementationClass = 'dev.guillermo.gradle.language.c.plugins.CLibraryPlugin'
         }
         cUnitTest {
             id = 'dev.guillermo.gradle.c-unit-test'
             displayName = 'C Unit Test Plugin'
             description = 'A plugin that sets up the infrastructure for testing C binaries using a simple test executable.'
-            tags.set(['native', 'c', 'unit-test', 'toolchain'])
+            tags.set([
+                'native',
+                'c',
+                'unit-test',
+                'toolchain'
+            ])
             implementationClass = 'dev.guillermo.gradle.language.c.plugins.CUnitTestPlugin'
         }
     }
