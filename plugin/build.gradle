@@ -1,15 +1,24 @@
 
 plugins {
     id 'java-gradle-plugin'
+    id 'com.diffplug.spotless'
+    id 'jacoco'
+    id 'org.sonarqube'
+    id 'maven-publish'
+    id 'signing'
 }
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
-}
+apply from: project.file('compile.gradle')
+apply from: project.file('spotless.gradle')
+apply from: project.file('test.gradle')
+apply from: project.file('jacoco.gradle')
+apply from: project.file('sonarqube.gradle')
+apply from: project.file('javadoc.gradle')
+apply from: project.file('publish.gradle')
 
 gradlePlugin {
     plugins {
@@ -18,31 +27,4 @@ gradlePlugin {
             implementationClass = 'com.leakyabstractions.gradle.language.c.GradlePluginCLanguagePlugin'
         }
     }
-}
-
-// Add a source set for the functional test suite
-sourceSets {
-    functionalTest {
-    }
-}
-
-configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
-
-// Add a task to run the functional tests
-tasks.register('functionalTest', Test) {
-    testClassesDirs = sourceSets.functionalTest.output.classesDirs
-    classpath = sourceSets.functionalTest.runtimeClasspath
-    useJUnitPlatform()
-}
-
-gradlePlugin.testSourceSets(sourceSets.functionalTest)
-
-tasks.named('check') {
-    // Run the functional tests as part of `check`
-    dependsOn(tasks.functionalTest)
-}
-
-tasks.named('test') {
-    // Use JUnit Jupiter for unit tests.
-    useJUnitPlatform()
 }

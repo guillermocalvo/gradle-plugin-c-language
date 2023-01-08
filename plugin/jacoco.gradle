@@ -1,0 +1,41 @@
+// Configure Java Code Coverage
+jacoco {
+    toolVersion = libs.versions.jacoco.get()
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        csv.required = false
+        xml.required = true
+        html.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
+    violationRules {
+        rule {
+            limit {
+                counter = 'METHOD'
+                minimum = 0.9
+            }
+        }
+        rule {
+            limit {
+                counter = 'BRANCH'
+                minimum = 0.8
+            }
+        }
+        rule {
+            limit {
+                counter = 'INSTRUCTION'
+                minimum = 0.8
+            }
+        }
+    }
+}
+
+check {
+    finalizedBy jacocoTestCoverageVerification
+}
