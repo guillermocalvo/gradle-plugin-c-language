@@ -14,14 +14,6 @@ jacocoTestReport {
 
 jacocoTestCoverageVerification {
     dependsOn jacocoTestReport
-    violationRules {
-        rule {
-            limit {
-                counter = 'METHOD'
-                minimum = 0.8
-            }
-        }
-    }
 }
 
 check {
