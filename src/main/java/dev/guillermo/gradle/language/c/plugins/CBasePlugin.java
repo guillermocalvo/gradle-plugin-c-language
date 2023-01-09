@@ -1,22 +1,17 @@
 
 package dev.guillermo.gradle.language.c.plugins;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
-import org.gradle.api.provider.ListProperty;
 import org.gradle.language.cpp.CppBinary;
 import org.gradle.language.cpp.CppComponent;
-import org.gradle.language.cpp.internal.DefaultCppExecutable;
-import org.gradle.language.cpp.internal.DefaultCppLibrary;
 import org.gradle.language.cpp.tasks.CppCompile;
 import org.gradle.language.nativeplatform.ComponentWithExecutable;
 import org.gradle.language.nativeplatform.ComponentWithSharedLibrary;
-import org.gradle.nativeplatform.tasks.LinkExecutable;
-import org.gradle.nativeplatform.tasks.LinkSharedLibrary;
-import org.gradle.nativeplatform.test.cpp.internal.DefaultCppTestExecutable;
+import org.gradle.nativeplatform.tasks.AbstractLinkTask;
 import org.gradle.nativeplatform.toolchain.GccCompatibleToolChain;
 import org.gradle.nativeplatform.toolchain.NativeToolChain;
 import org.gradle.nativeplatform.toolchain.VisualCpp;
@@ -37,51 +32,62 @@ class CBasePlugin {
     private void configure(CppBinary binary) {
 
         final NativeToolChain toolchain = binary.getToolChain();
-        final CppCompile compileTask = binary.getCompileTask().get();
-
         this.logger.info(
-                "Configuring C binary: {}.{} - {}",
+                "Configuring {}.{} for {}",
                 this.component.getBaseName().get(),
                 binary.getName(),
-                binary.getBaseName().get());
+                toolchain.getDisplayName());
+        this.configureCompileTask(toolchain, binary.getCompileTask().get());
+        this.getLinkTask(binary).ifPresent(linkTask -> this.configureLinkTask(toolchain, linkTask));
+    }
 
-        final Map<String, String> from = new HashMap<>();
-
-        from.put("include", "**/*.c");
-
-        if (binary instanceof DefaultCppTestExecutable) {
-            from.put("dir", "src/test/c");
-        } else if (binary instanceof DefaultCppLibrary) {
-            from.put("dir", "src/main/c");
-        } else if (binary instanceof DefaultCppExecutable) {
-            from.put("dir", "src/main/c");
-        }
-
-        this.logger.info("Configuring compile task: {}", compileTask.getName());
-        this.logger.info("  source.from: {}", from);
-        compileTask.getSource().setFrom(this.project.fileTree(from));
-
-        final ListProperty<String> currentCompilerArgs = compileTask.getCompilerArgs();
-
+    private void configureCompileTask(NativeToolChain toolchain, CppCompile compileTask) {
+        // Configure C sources
+        final String fromDir = "src/" + component.getName() + "/c";
+        compileTask
+                .getSource()
+                .setFrom(this.project.fileTree(Map.of("dir", fromDir, "include", "**/*.c")));
+        this.logger.info(
+                "  {}.{}.{}.source.from: {}",
+                this.component.getBaseName().get(),
+                this.component.getName(),
+                compileTask.getName(),
+                fromDir);
+        // Configure compiler args
         if (toolchain instanceof VisualCpp) {
-            currentCompilerArgs.addAll("/TC", "/std:c17");
+            compileTask.getCompilerArgs().addAll("/TC");
         } else if (toolchain instanceof GccCompatibleToolChain) {
-            currentCompilerArgs.addAll("-x", "c", "-std=c11");
+            compileTask.getCompilerArgs().addAll("-x", "c");
         }
+        this.logger.info(
+                "  {}.{}.{}.compilerArgs: {})",
+                this.component.getBaseName().get(),
+                this.component.getName(),
+                compileTask.getName(),
+                compileTask.getCompilerArgs().get());
+    }
 
-        if (binary instanceof ComponentWithExecutable) {
-            final LinkExecutable linkTask = ((ComponentWithExecutable) binary).getLinkTask().get();
-            this.logger.info("Configuring link task: {}", linkTask.getName());
-            if (toolchain instanceof GccCompatibleToolChain) {
-                linkTask.getLinkerArgs().addAll("-nodefaultlibs", "-lc");
-            }
-        } else if (binary instanceof ComponentWithSharedLibrary) {
-            final LinkSharedLibrary linkTask = ((ComponentWithSharedLibrary) binary).getLinkTask().get();
-            this.logger.info("Configuring link task: {}", linkTask.getName());
-            if (toolchain instanceof GccCompatibleToolChain) {
-                linkTask.getLinkerArgs().addAll("-nodefaultlibs", "-lc");
-            }
+    private void configureLinkTask(NativeToolChain toolchain, AbstractLinkTask linkTask) {
+        // Configure linker args
+        if (toolchain instanceof GccCompatibleToolChain) {
+            linkTask.getLinkerArgs().addAll("-nodefaultlibs", "-lc");
         }
+        this.logger.info(
+                "  {}.{}.{}.linkerArgs: {}",
+                this.component.getBaseName().get(),
+                this.component.getName(),
+                linkTask.getName(),
+                linkTask.getLinkerArgs().get());
+    }
+
+    private Optional<AbstractLinkTask> getLinkTask(CppBinary binary) {
+        if (binary instanceof ComponentWithExecutable) {
+            return Optional.of(((ComponentWithExecutable) binary).getLinkTask().get());
+        }
+        if (binary instanceof ComponentWithSharedLibrary) {
+            return Optional.of(((ComponentWithSharedLibrary) binary).getLinkTask().get());
+        }
+        return Optional.empty();
     }
 
     static void configure(Project project, Class<? extends CppComponent> clazz) {
