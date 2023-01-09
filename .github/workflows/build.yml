@@ -14,7 +14,7 @@ on:
 jobs:
   build:
 
-    name: Build on JDK17
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +36,7 @@ jobs:
       with:
         distribution: 'zulu'
         java-package: jdk
-        java-version: 17
+        java-version: 11
 
     # ================================
     # CACHE SONARCLOUD PACKAGES
