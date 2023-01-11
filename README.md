@@ -25,7 +25,7 @@ It is currently based on [the C++ Application Plugin](https://docs.gradle.org/cu
 
 ```gradle
 plugins {
-  id "dev.guillermo.gradle.c-application" version "0.1.0"
+  id "dev.guillermo.gradle.c-application" version "0.3.0"
 }
 ```
 
@@ -40,7 +40,7 @@ It is currently based on [the C++ Library Plugin](https://docs.gradle.org/curren
 
 ```gradle
 plugins {
-  id "dev.guillermo.gradle.c-library" version "0.1.0"
+  id "dev.guillermo.gradle.c-library" version "0.3.0"
 }
 ```
 
@@ -55,7 +55,7 @@ It is currently based on [the C++ Unit Test Plugin](https://docs.gradle.org/curr
 
 ```gradle
 plugins {
-  id "dev.guillermo.gradle.c-unit-test" version "0.1.0"
+  id "dev.guillermo.gradle.c-unit-test" version "0.3.0"
 }
 ```
 
