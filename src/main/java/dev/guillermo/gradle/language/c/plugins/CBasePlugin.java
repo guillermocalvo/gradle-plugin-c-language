@@ -16,17 +16,21 @@ import org.gradle.nativeplatform.toolchain.GccCompatibleToolChain;
 import org.gradle.nativeplatform.toolchain.NativeToolChain;
 import org.gradle.nativeplatform.toolchain.VisualCpp;
 
+import dev.guillermo.gradle.language.c.CCompiler;
+
 class CBasePlugin {
 
     private final Project project;
     private final CppComponent component;
     private final Logger logger;
+    private final CCompiler compiler;
 
     CBasePlugin(Project project, CppComponent component) {
         this.project = project;
         this.component = component;
         this.logger = project.getLogger();
         this.logger.info("Configuring component: {}", component.getName());
+        this.compiler = project.getExtensions().getByType(CCompiler.class);
     }
 
     private void configure(CppBinary binary) {
@@ -53,11 +57,83 @@ class CBasePlugin {
                 this.component.getName(),
                 compileTask.getName(),
                 fromDir);
+        // Configure compiler macros
+        compileTask.getMacros().putAll(this.compiler.getMacros());
+        this.logger.info(
+                "  {}.{}.{}.macros: {})",
+                this.component.getBaseName().get(),
+                this.component.getName(),
+                compileTask.getName(),
+                compileTask.getMacros());
         // Configure compiler args
         if (toolchain instanceof VisualCpp) {
-            compileTask.getCompilerArgs().addAll("/TC");
+            compileTask.getCompilerArgs().add("/TC");
+            switch (this.compiler.getDialect()) {
+                case C90:
+                    this.logger.warn(
+                            "{}: Cannot specify strict C90 conformance. Some Microsoft extensions are included.",
+                            compileTask.getName());
+                    compileTask.getCompilerArgs().add("/Za");
+                    break;
+                case C99:
+                    this.logger.warn(
+                            "{}: Cannot specify strict C99 conformance. The compiler doesn't implement several required features.",
+                            compileTask.getName());
+                    break;
+                case C11:
+                    compileTask.getCompilerArgs().add("/std:c11");
+                    break;
+                case C17:
+                    compileTask.getCompilerArgs().add("/std:c17");
+                    break;
+                case DEFAULT_DIALECT:
+                    break;
+            }
+            // Treat all compiler warnings as errors
+            if (this.compiler.failOnWarning()) {
+                compileTask.getCompilerArgs().add("/WX");
+            }
+            // Suppress all compiler warnings
+            if (this.compiler.suppressAllWarnings()) {
+                compileTask.getCompilerArgs().add("/w");
+            }
+            // Enable OpenMP Support
+            if (this.compiler.enableOpenMp()) {
+                compileTask.getCompilerArgs().add("/openmp");
+            }
         } else if (toolchain instanceof GccCompatibleToolChain) {
             compileTask.getCompilerArgs().addAll("-x", "c");
+            switch (this.compiler.getDialect()) {
+                case C90:
+                    compileTask.getCompilerArgs().add("-std=c90");
+                    break;
+                case C99:
+                    this.logger.warn(
+                            "{}: C99 is substantially completely supported. See https://gcc.gnu.org/c99status.html for more information.",
+                            compileTask.getName());
+                    compileTask.getCompilerArgs().add("-std=c99");
+                    break;
+                case C11:
+                    compileTask.getCompilerArgs().add("/std:c11");
+                    break;
+                case C17:
+                    compileTask.getCompilerArgs().add("/std:c17");
+                    break;
+                case DEFAULT_DIALECT:
+                    break;
+            }
+            // Make all warnings into errors
+            if (this.compiler.failOnWarning()) {
+                compileTask.getCompilerArgs().add("-Werror");
+            }
+            // Inhibit all warning messages
+            if (this.compiler.suppressAllWarnings()) {
+                compileTask.getCompilerArgs().add("-w");
+            }
+            // Enable handling of OpenMP directives (implies -fopenmp-simd and -pthread)
+            if (this.compiler.enableOpenMp()) {
+                compileTask.getCompilerArgs().add("-fopenmp");
+            }
         }
         this.logger.info(
                 "  {}.{}.{}.compilerArgs: {})",
