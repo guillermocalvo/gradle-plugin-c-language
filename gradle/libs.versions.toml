@@ -1,9 +1,10 @@
 [versions]
-assertj = "3.23.1"
+assertj = "3.24.1"
 google-java-format = "1.15.0"
 google-java-format-jdk8 = "1.7"
 jacoco = "0.8.8"
-junit = "5.9.1"
+junit = "5.9.2"
+mockito = "4.11.0"
 plugin-publish = "1.1.0"
 sonarqube = "3.5.0.2730"
 spotless = "6.12.0"
@@ -12,9 +13,11 @@ spotless = "6.12.0"
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 
 [bundles]
-test-implementation = [ "assertj-core", "junit-jupiter-api" ]
+test-implementation = [ "assertj-core", "junit-jupiter-api", "mockito-core", "mockito-junit-jupiter" ]
 test-runtime = [ "junit-jupiter-engine" ]
 
 [plugins]
