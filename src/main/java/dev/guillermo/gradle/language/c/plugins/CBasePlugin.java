@@ -114,10 +114,10 @@ class CBasePlugin {
                     compileTask.getCompilerArgs().add("-std=c99");
                     break;
                 case C11:
-                    compileTask.getCompilerArgs().add("/std:c11");
+                    compileTask.getCompilerArgs().add("-std=c11");
                     break;
                 case C17:
-                    compileTask.getCompilerArgs().add("/std:c17");
+                    compileTask.getCompilerArgs().add("-std=c17");
                     break;
                 case DEFAULT_DIALECT:
                     break;
