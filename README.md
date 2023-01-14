@@ -1,10 +1,11 @@
 
 [![Build Status](https://github.com/guillermocalvo/gradle-plugin-c-language/workflows/Build/badge.svg)](https://github.com/guillermocalvo/gradle-plugin-c-language/actions?query=workflow%3ABuild)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=guillermocalvo_gradle-plugin-c-language&metric=alert_status)](https://sonarcloud.io/dashboard?id=guillermocalvo_gradle-plugin-c-language)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=guillermocalvo_gradle-plugin-c-language&metric=coverage)](https://sonarcloud.io/component_measures?id=guillermocalvo_gradle-plugin-c-language&metric=coverage&view=list)
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/dev.guillermo.gradle.c-application)](https://plugins.gradle.org/search?term=dev.guillermo)
 
 
-# gradle-plugin-c-language
+# C Language Gradle Plugin
 
 This is a Gradle Plugin for Building C Projects.
 
