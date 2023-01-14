@@ -24,6 +24,19 @@ apply from: project.file('test.gradle')
 apply from: project.file('jacoco.gradle')
 apply from: project.file('sonarqube.gradle')
 
+def functionalTestSrc = sourceSets.create('functionalTest')
+configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
+tasks.register('functionalTest', Test) {
+    useJUnitPlatform()
+    testClassesDirs = functionalTestSrc.output.classesDirs
+    classpath = functionalTestSrc.runtimeClasspath
+    gradlePlugin.testSourceSets(functionalTestSrc)
+}
+
+dependencies {
+    functionalTestRuntimeOnly libs.bundles.test.runtime
+}
+
 gradlePlugin {
     website = 'https://guillermo.dev/gradle-plugin-c-language/'
     vcsUrl = 'https://github.com/guillermocalvo/gradle-plugin-c-language'
@@ -100,5 +113,6 @@ jacocoTestCoverageVerification {
 }
 
 check {
+    dependsOn tasks.functionalTest
     finalizedBy jacocoTestCoverageVerification
 }
