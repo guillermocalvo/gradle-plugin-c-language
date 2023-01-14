@@ -66,3 +66,39 @@ gradlePlugin {
         }
     }
 }
+
+jacoco {
+    toolVersion = libs.versions.jacoco.get()
+}
+
+jacocoTestReport {
+    dependsOn test
+}
+
+jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
+    violationRules {
+        rule {
+            limit {
+                counter = 'METHOD'
+                minimum = 0.9
+            }
+        }
+        rule {
+            limit {
+                counter = 'BRANCH'
+                minimum = 0.8
+            }
+        }
+        rule {
+            limit {
+                counter = 'INSTRUCTION'
+                minimum = 0.8
+            }
+        }
+    }
+}
+
+check {
+    finalizedBy jacocoTestCoverageVerification
+}
