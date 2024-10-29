@@ -169,11 +169,11 @@ class CBasePlugin {
     }
 
     private Optional<AbstractLinkTask> getLinkTask(CppBinary binary) {
-        if (binary instanceof ComponentWithExecutable) {
-            return Optional.of(((ComponentWithExecutable) binary).getLinkTask().get());
+        if (binary instanceof ComponentWithExecutable componentWithExecutable) {
+            return Optional.of(componentWithExecutable.getLinkTask().get());
         }
-        if (binary instanceof ComponentWithSharedLibrary) {
-            return Optional.of(((ComponentWithSharedLibrary) binary).getLinkTask().get());
+        if (binary instanceof ComponentWithSharedLibrary componentWithSharedLibrary) {
+            return Optional.of(componentWithSharedLibrary.getLinkTask().get());
         }
         return Optional.empty();
     }
