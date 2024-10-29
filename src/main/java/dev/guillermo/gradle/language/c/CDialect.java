@@ -1,8 +1,6 @@
 
 package dev.guillermo.gradle.language.c;
 
-import static dev.guillermo.gradle.language.c.CDialect.values;
-
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -10,7 +8,7 @@ import org.gradle.api.GradleException;
 
 /** Dialect of C */
 public enum CDialect {
-    DEFAULT_DIALECT, C90, C99, C11, C17;
+    DEFAULT_DIALECT, C90, C99, C11, C17, C23;
 
     /**
      * Tries to convert a string into a valid dialect of C.

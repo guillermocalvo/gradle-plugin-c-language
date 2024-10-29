@@ -86,6 +86,12 @@ class CBasePlugin {
                 case C17:
                     compileTask.getCompilerArgs().add("/std:c17");
                     break;
+                case C23:
+                    this.logger.warn(
+                            "{}: Cannot specify strict C23 conformance. The compiler doesn't implement several required features.",
+                            compileTask.getName());
+                    compileTask.getCompilerArgs().add("/std:clatest");
+                    break;
                 case DEFAULT_DIALECT:
                     break;
             }
@@ -118,6 +124,12 @@ class CBasePlugin {
                     break;
                 case C17:
                     compileTask.getCompilerArgs().add("-std=c17");
+                    break;
+                case C23:
+                    this.logger.warn(
+                            "{}: C23 is experimentaly and incompletely supported. See https://gcc.gnu.org/onlinedocs/gcc/Standards.html for more information.",
+                            compileTask.getName());
+                    compileTask.getCompilerArgs().add("-std=c23");
                     break;
                 case DEFAULT_DIALECT:
                     break;

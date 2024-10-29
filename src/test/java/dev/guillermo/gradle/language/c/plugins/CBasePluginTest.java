@@ -126,7 +126,6 @@ class CBasePluginTest {
         // Given
         compiler.getMacros().put("FOO", "BAR");
         final CppExecutable binary = mock();
-        final GccCompatibleToolChain gcc = mock();
         this.setUpMocks(CppApplication.class, GccCompatibleToolChain.class, compiler, binary);
         when(binary.getLinkTask()).then(x -> linkTaskProvider);
         // When
@@ -243,6 +242,29 @@ class CBasePluginTest {
     }
 
     @Test
+    void c23LibraryWithGcc() {
+        // Given
+        compiler.setDialect("C23");
+        final CppSharedLibrary binary = mock();
+        this.setUpMocks(CppLibrary.class, GccCompatibleToolChain.class, compiler, binary);
+        when(binary.getLinkTask()).then(x -> linkTaskProvider);
+        // When
+        CBasePlugin.configure(project, CppLibrary.class);
+        // Then
+        verify(source).setFrom(from);
+        verifyNoMoreInteractions(source);
+        verify(macros).putAll(compiler.getMacros());
+        verifyNoMoreInteractions(macros);
+        verify(compilerArgs).addAll("-x", "c");
+        verify(compilerArgs).add("-std=c23");
+        verify(compilerArgs).get();
+        verifyNoMoreInteractions(compilerArgs);
+        verify(linkerArgs).addAll("-nodefaultlibs", "-lc");
+        verify(linkerArgs).get();
+        verifyNoMoreInteractions(linkerArgs);
+    }
+
+    @Test
     void cAppWithVisualCpp() {
         // Given
         compiler.getMacros().put("FOO", "BAR");
@@ -350,6 +372,28 @@ class CBasePluginTest {
         verifyNoMoreInteractions(macros);
         verify(compilerArgs).add("/TC");
         verify(compilerArgs).add("/std:c17");
+        verify(compilerArgs).get();
+        verifyNoMoreInteractions(compilerArgs);
+        verify(linkerArgs).get();
+        verifyNoMoreInteractions(linkerArgs);
+    }
+
+    @Test
+    void c23LibraryWithVisualCpp() {
+        // Given
+        compiler.setDialect("C23");
+        final CppSharedLibrary binary = mock();
+        this.setUpMocks(CppApplication.class, VisualCpp.class, compiler, binary);
+        when(binary.getLinkTask()).then(x -> linkTaskProvider);
+        // When
+        CBasePlugin.configure(project, CppApplication.class);
+        // Then
+        verify(source).setFrom(from);
+        verifyNoMoreInteractions(source);
+        verify(macros).putAll(compiler.getMacros());
+        verifyNoMoreInteractions(macros);
+        verify(compilerArgs).add("/TC");
+        verify(compilerArgs).add("/std:clatest");
         verify(compilerArgs).get();
         verifyNoMoreInteractions(compilerArgs);
         verify(linkerArgs).get();
