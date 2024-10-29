@@ -19,6 +19,14 @@ public class CApplicationPlugin extends CppApplicationPlugin {
 
     private final NativeComponentFactory componentFactory;
 
+    /**
+     * Creates a new instance.
+     *
+     * @param componentFactory The component factory.
+     * @param toolChainSelector The toolchain selector.
+     * @param attributesFactory The attributes factory.
+     * @param targetMachineFactory The target machine factory.
+     */
     @Inject
     public CApplicationPlugin(
             NativeComponentFactory componentFactory,
