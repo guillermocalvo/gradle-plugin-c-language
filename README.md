@@ -1,10 +1,11 @@
 
 [![Build Status](https://github.com/guillermocalvo/gradle-plugin-c-language/workflows/Build/badge.svg)](https://github.com/guillermocalvo/gradle-plugin-c-language/actions?query=workflow%3ABuild)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=guillermocalvo_gradle-plugin-c-language&metric=alert_status)](https://sonarcloud.io/dashboard?id=guillermocalvo_gradle-plugin-c-language)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=guillermocalvo_gradle-plugin-c-language&metric=coverage)](https://sonarcloud.io/component_measures?id=guillermocalvo_gradle-plugin-c-language&metric=coverage&view=list)
 [![Gradle Plugin Portal](https://img.shields.io/gradle-plugin-portal/v/dev.guillermo.gradle.c-application)](https://plugins.gradle.org/search?term=dev.guillermo)
 
 
-# gradle-plugin-c-language
+# C Language Gradle Plugin
 
 This is a Gradle Plugin for Building C Projects.
 
@@ -25,7 +26,7 @@ It is currently based on [the C++ Application Plugin](https://docs.gradle.org/cu
 
 ```gradle
 plugins {
-  id "dev.guillermo.gradle.c-application" version "0.3.0"
+  id "dev.guillermo.gradle.c-application" version "0.3.1"
 }
 ```
 
@@ -40,7 +41,7 @@ It is currently based on [the C++ Library Plugin](https://docs.gradle.org/curren
 
 ```gradle
 plugins {
-  id "dev.guillermo.gradle.c-library" version "0.3.0"
+  id "dev.guillermo.gradle.c-library" version "0.3.1"
 }
 ```
 
@@ -55,7 +56,7 @@ It is currently based on [the C++ Unit Test Plugin](https://docs.gradle.org/curr
 
 ```gradle
 plugins {
-  id "dev.guillermo.gradle.c-unit-test" version "0.3.0"
+  id "dev.guillermo.gradle.c-unit-test" version "0.3.1"
 }
 ```
 
