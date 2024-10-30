@@ -21,6 +21,11 @@ public class DefaultCCompiler implements CCompiler {
     private boolean suppressAllWarnings;
     private boolean enableOpenMp;
 
+    /**
+     * Creates a new instance.
+     *
+     * @param name The compiler name.
+     */
     @Inject
     public DefaultCCompiler(String name) {
         this.name = name;
@@ -41,6 +46,11 @@ public class DefaultCCompiler implements CCompiler {
         return this.dialect;
     }
 
+    /**
+     * Sets the dialect of C that should be used for all compilation tasks.
+     *
+     * @param dialect The dialect of C that should be used for all compilation tasks.
+     */
     public void setDialect(String dialect) {
         this.dialect = CDialect.from(dialect).orElse(DEFAULT_DIALECT);
     }
@@ -55,6 +65,11 @@ public class DefaultCCompiler implements CCompiler {
         return this.failOnWarning;
     }
 
+    /**
+     * Sets the flag to treat warnings as errors in all compilation tasks.
+     *
+     * @param failOnWarning The flag to treat warnings as errors in all compilation tasks.
+     */
     public void setFailOnWarning(boolean failOnWarning) {
         this.failOnWarning = failOnWarning;
     }
@@ -64,6 +79,11 @@ public class DefaultCCompiler implements CCompiler {
         return this.suppressAllWarnings;
     }
 
+    /**
+     * Sets the flag to suppress all warnings in all compilation tasks.
+     *
+     * @param suppressAllWarnings The flag to suppress all warnings in all compilation tasks
+     */
     public void setSuppressAllWarnings(boolean suppressAllWarnings) {
         this.suppressAllWarnings = suppressAllWarnings;
     }
@@ -73,6 +93,11 @@ public class DefaultCCompiler implements CCompiler {
         return this.enableOpenMp;
     }
 
+    /**
+     * Sets the flag to enable OpenMP support in all compilation tasks.
+     *
+     * @param enableOpenMp The flag to enable OpenMP support in all compilation tasks.
+     */
     public void setEnableOpenMp(boolean enableOpenMp) {
         this.enableOpenMp = enableOpenMp;
     }

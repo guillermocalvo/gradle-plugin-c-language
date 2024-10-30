@@ -17,6 +17,15 @@ import org.gradle.nativeplatform.test.cpp.plugins.CppUnitTestPlugin;
  */
 public class CUnitTestPlugin extends CppUnitTestPlugin {
 
+    /**
+     * Creates a new instance.
+     *
+     * @param componentFactory The component factory.
+     * @param toolChainSelector The toolchain selector.
+     * @param objectFactory The object factory.
+     * @param attributesFactory The attributes factory.
+     * @param targetMachineFactory The target machine factory.
+     */
     @Inject
     public CUnitTestPlugin(
             NativeComponentFactory componentFactory,

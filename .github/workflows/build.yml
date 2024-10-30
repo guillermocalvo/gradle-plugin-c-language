@@ -23,7 +23,7 @@ jobs:
     # CHECKOUT
     # ================================
     - name: Checkout git branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         # Fetch all history for all tags and branches (recommended by SonarQube)
         fetch-depth: 0
@@ -32,17 +32,17 @@ jobs:
     # SET UP JDK
     # ================================
     - name: Set up JDK
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-package: jdk
-        java-version: 11
+        java-version: 17
 
     # ================================
     # CACHE SONARCLOUD PACKAGES
     # ================================
     - name: Cache SonarCloud packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         key: ${{ runner.os }}-sonar
         path: |
@@ -53,26 +53,25 @@ jobs:
     # ================================
     # SETUP GRADLE
     # ================================
-    - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
+    - name: Set up Gradle
+      uses: gradle/actions/setup-gradle@v4
       with:
-        cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+        build-scan-publish: true
+        build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
+        build-scan-terms-of-use-agree: "yes"
+        cache-read-only: ${{ github.ref_name != 'main' && github.ref_name != 'develop' }}
 
     # ================================
     # BUILD
     # ================================
     - name: Build
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: build -x check --info --scan
+      run: ./gradlew build -x check
 
     # ================================
     # CHECK
     # ================================
     - name: Check
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: check --info --scan
+      run: ./gradlew check
 
     # ================================
     # ANALYZE
@@ -83,6 +82,4 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: https://sonarcloud.io
         SONAR_ORGANIZATION: guillermocalvo
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: sonarqube --info --scan
+      run: ./gradlew sonar

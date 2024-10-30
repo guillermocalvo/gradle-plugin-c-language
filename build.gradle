@@ -11,13 +11,6 @@ repositories {
     mavenCentral()
 }
 
-if (hasProperty('buildScan')) {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-    }
-}
-
 apply from: project.file('compile.gradle')
 apply from: project.file('spotless.gradle')
 apply from: project.file('test.gradle')
