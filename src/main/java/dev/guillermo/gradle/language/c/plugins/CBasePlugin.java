@@ -17,6 +17,7 @@ import org.gradle.nativeplatform.toolchain.NativeToolChain;
 import org.gradle.nativeplatform.toolchain.VisualCpp;
 
 import dev.guillermo.gradle.language.c.CCompiler;
+import dev.guillermo.gradle.language.c.CLinker;
 
 class CBasePlugin {
 
@@ -24,6 +25,7 @@ class CBasePlugin {
     private final CppComponent component;
     private final Logger logger;
     private final CCompiler compiler;
+    private final CLinker linker;
 
     CBasePlugin(Project project, CppComponent component) {
         this.project = project;
@@ -31,6 +33,7 @@ class CBasePlugin {
         this.logger = project.getLogger();
         this.logger.info("Configuring component: {}", component.getName());
         this.compiler = project.getExtensions().getByType(CCompiler.class);
+        this.linker = project.getExtensions().getByType(CLinker.class);
     }
 
     private void configure(CppBinary binary) {
@@ -60,7 +63,7 @@ class CBasePlugin {
         // Configure compiler macros
         compileTask.getMacros().putAll(this.compiler.getMacros());
         this.logger.info(
-                "  {}.{}.{}.macros: {})",
+                "  {}.{}.{}.macros: {}",
                 this.component.getBaseName().get(),
                 this.component.getName(),
                 compileTask.getName(),
@@ -107,6 +110,8 @@ class CBasePlugin {
             if (this.compiler.enableOpenMp()) {
                 compileTask.getCompilerArgs().add("/openmp");
             }
+            // User-defined compile options
+            compileTask.getCompilerArgs().addAll(this.compiler.getVisualCppOptions());
         } else if (toolchain instanceof GccCompatibleToolChain) {
             compileTask.getCompilerArgs().addAll("-x", "c");
             switch (this.compiler.getDialect()) {
@@ -146,9 +151,11 @@ class CBasePlugin {
             if (this.compiler.enableOpenMp()) {
                 compileTask.getCompilerArgs().add("-fopenmp");
             }
+            // User-defined compile options
+            compileTask.getCompilerArgs().addAll(this.compiler.getGccOptions());
         }
         this.logger.info(
-                "  {}.{}.{}.compilerArgs: {})",
+                "  {}.{}.{}.compilerArgs: {}",
                 this.component.getBaseName().get(),
                 this.component.getName(),
                 compileTask.getName(),
@@ -157,8 +164,20 @@ class CBasePlugin {
 
     private void configureLinkTask(NativeToolChain toolchain, AbstractLinkTask linkTask) {
         // Configure linker args
-        if (toolchain instanceof GccCompatibleToolChain) {
-            linkTask.getLinkerArgs().addAll("-nodefaultlibs", "-lc");
+        if (toolchain instanceof VisualCpp) {
+            // Avoid using the standard system libraries
+            if (this.linker.noDefaultLibraries()) {
+                linkTask.getLinkerArgs().add("/NODEFAULTLIB");
+            }
+            // User-defined link options
+            linkTask.getLinkerArgs().addAll(this.linker.getVisualCppOptions());
+        } else if (toolchain instanceof GccCompatibleToolChain) {
+            // Avoid using the standard system libraries
+            if (this.linker.noDefaultLibraries()) {
+                linkTask.getLinkerArgs().add("-nodefaultlibs");
+            }
+            // User-defined link options
+            linkTask.getLinkerArgs().addAll(this.linker.getGccOptions());
         }
         this.logger.info(
                 "  {}.{}.{}.linkerArgs: {}",

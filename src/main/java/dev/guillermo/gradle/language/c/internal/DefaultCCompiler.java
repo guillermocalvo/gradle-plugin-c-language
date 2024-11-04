@@ -3,7 +3,9 @@ package dev.guillermo.gradle.language.c.internal;
 
 import static dev.guillermo.gradle.language.c.CDialect.DEFAULT_DIALECT;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -20,6 +22,8 @@ public class DefaultCCompiler implements CCompiler {
     private boolean failOnWarning;
     private boolean suppressAllWarnings;
     private boolean enableOpenMp;
+    private List<String> gccOptions;
+    private List<String> visualCppOptions;
 
     /**
      * Creates a new instance.
@@ -34,6 +38,8 @@ public class DefaultCCompiler implements CCompiler {
         this.failOnWarning = false;
         this.suppressAllWarnings = false;
         this.enableOpenMp = false;
+        this.gccOptions = new ArrayList<>();
+        this.visualCppOptions = new ArrayList<>();
     }
 
     @Override
@@ -100,5 +106,15 @@ public class DefaultCCompiler implements CCompiler {
      */
     public void setEnableOpenMp(boolean enableOpenMp) {
         this.enableOpenMp = enableOpenMp;
+    }
+
+    @Override
+    public List<String> getGccOptions() {
+        return this.gccOptions;
+    }
+
+    @Override
+    public List<String> getVisualCppOptions() {
+        return this.visualCppOptions;
     }
 }
