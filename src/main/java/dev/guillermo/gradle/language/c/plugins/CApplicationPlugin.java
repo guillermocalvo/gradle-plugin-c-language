@@ -12,7 +12,9 @@ import org.gradle.language.nativeplatform.internal.toolchains.ToolChainSelector;
 import org.gradle.nativeplatform.TargetMachineFactory;
 
 import dev.guillermo.gradle.language.c.CCompiler;
+import dev.guillermo.gradle.language.c.CLinker;
 import dev.guillermo.gradle.language.c.internal.DefaultCCompiler;
+import dev.guillermo.gradle.language.c.internal.DefaultCLinker;
 
 /** A plugin that produces a native application from C source. */
 public class CApplicationPlugin extends CppApplicationPlugin {
@@ -41,9 +43,11 @@ public class CApplicationPlugin extends CppApplicationPlugin {
     public void apply(Project project) {
         project.getLogger().info("Applying c-application plugin");
         super.apply(project);
-        // Add the top-level compiler and extension
+        // Add the top-level compiler, linker and extensions
         final CCompiler compiler = componentFactory.newInstance(CCompiler.class, DefaultCCompiler.class, "compiler");
+        final CLinker linker = componentFactory.newInstance(CLinker.class, DefaultCLinker.class, "linker");
         project.getExtensions().add(CCompiler.class, "compiler", compiler);
+        project.getExtensions().add(CLinker.class, "linker", linker);
         CBasePlugin.configure(project, CppApplication.class);
     }
 }

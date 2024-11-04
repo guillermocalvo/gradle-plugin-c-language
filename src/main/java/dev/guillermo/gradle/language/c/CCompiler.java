@@ -1,6 +1,7 @@
 
 package dev.guillermo.gradle.language.c;
 
+import java.util.List;
 import java.util.Map;
 
 import org.gradle.api.component.SoftwareComponent;
@@ -42,4 +43,18 @@ public interface CCompiler extends SoftwareComponent {
      * @return Flag to enable OpenMP support in all compilation tasks.
      */
     boolean enableOpenMp();
+
+    /**
+     * User-defined compile options for GCC-compatible toolchains.
+     *
+     * @return User-defined compile options for GCC-compatible toolchains.
+     */
+    List<String> getGccOptions();
+
+    /**
+     * User-defined compile options for Visual Studio or Visual C++ toolchains.
+     *
+     * @return User-defined compile options for Visual Studio or Visual C++ toolchains.
+     */
+    List<String> getVisualCppOptions();
 }
